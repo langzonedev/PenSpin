@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A one-tap rhythm game from Lang Systems Arcade. Keep the pen spinning and see how long you can hold your streak.">
+  <meta name="theme-color" content="#100b24">
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="game.css">
+  <script defer src="game.js"></script>
+  <title>PenSpin | Lang Systems Arcade</title>
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="https://arcade.langsystems.com.au/">
+      <img src="assets/mark.svg" alt="" width="34" height="34">
+      <span>LANG SYSTEMS <b>ARCADE</b></span>
+    </a>
+    <button id="sound" class="sound" type="button" aria-pressed="false" aria-label="Sound">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="waves" d="M16 8a6 6 0 0 1 0 8m2-11a10 10 0 0 1 0 14"/><path class="muted" d="m16 10 5 5m0-5-5 5"/></svg>
+      <span id="sound-label">Sound off</span>
+    </button>
+  </header>
+  <main class="cabinet">
+    <section class="intro" aria-labelledby="title">
+      <p class="kicker"><span></span> THE DESK SESSIONS</p>
+      <h1 id="title">Pen<span>Spin</span></h1>
+      <p class="tagline">Find your rhythm.</p>
+      <p class="description">The office is quiet. The pen is in your hand. Give it a flick and see how long you can keep it spinning.</p>
+      <div class="instructions" id="instructions">
+        <p><b>01</b><span>Tap once to spin the pen.</span></p>
+        <p><b>02</b><span>Tap again as the dot meets the diamond.</span></p>
+        <p><b>03</b><span>Keep the streak as the beat gets faster.</span></p>
+      </div>
+      <a class="back" href="https://arcade.langsystems.com.au/">← <span>Back to the arcade</span></a>
+    </section>
+    <section class="game" aria-label="PenSpin playfield">
+      <div class="frame-top">
+        <span class="session"><i></i> AFTER HOURS</span>
+        <span id="tempo">75 BPM</span>
+      </div>
+      <div id="stage" class="stage" data-state="ready">
+        <img class="office" src="assets/office.svg" alt="" draggable="false">
+        <div class="shade"></div>
+        <div class="stats">
+          <div><span>STREAK</span><strong id="streak">00</strong></div>
+          <div><span>BEST</span><strong id="best">00</strong></div>
+        </div>
+        <svg id="grip" class="grip" viewBox="-205 -190 470 525" aria-hidden="true">
+          <defs>
+            <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#ffd3a1"/><stop offset=".39" stop-color="#d99078"/><stop offset=".72" stop-color="#a45365"/><stop offset="1" stop-color="#592d50"/></linearGradient>
+            <linearGradient id="finger" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#f0ad8c"/><stop offset=".6" stop-color="#bd706d"/><stop offset="1" stop-color="#793e59"/></linearGradient>
+            <linearGradient id="cuff" x1="0" y1="0" x2="1" y2=".8"><stop stop-color="#4c477a"/><stop offset=".53" stop-color="#292746"/><stop offset="1" stop-color="#18162e"/></linearGradient>
+            <linearGradient id="barrel" x2="0" y2="1"><stop stop-color="#e4d7ff"/><stop offset=".24" stop-color="#ae9cff"/><stop offset=".58" stop-color="#6354bf"/><stop offset="1" stop-color="#352459"/></linearGradient>
+            <linearGradient id="chrome" x2="0" y2="1"><stop stop-color="#fff1db"/><stop offset=".45" stop-color="#b9adcf"/><stop offset="1" stop-color="#574968"/></linearGradient>
+          </defs>
+          <g id="hand">
+            <path d="M151 213C112 172 103 151 72 135 45 121 29 105 22 79 17 62 18 41 11 28L-15 10C-31 1-41-10-34-23-28-36-13-34 4-25l22 12c13 4 22 13 29 26l22 37 37 17c20 7 39 33 53 66l50 63z" fill="url(#skin)" stroke="#512b45" stroke-width="2"/>
+            <path d="M107 86 80 61 69 28c-6-15-20-26-34-36L9-30c-9-8-20-8-26 1-7 10-2 18 7 27L17 22l12 36" fill="url(#finger)" stroke="#753c50" stroke-width="2"/>
+            <path d="M128 92 109 55c-7-12-14-19-28-25L43 13c-12-5-20-1-23 9-4 12 5 18 16 23l28 17 18 35" fill="url(#finger)" stroke="#743a52" stroke-width="2"/>
+            <path d="M138 111c-13-23-28-32-52-42l-24-9c-11-4-20 0-22 10-3 11 4 18 17 23l19 11 15 24" fill="url(#finger)" stroke="#743a52" stroke-width="2"/>
+            <path d="M88 132c24 8 48 35 68 63l18-8c-19-37-53-78-73-81-18-3-30 8-13 26z" fill="#8d465f" opacity=".46"/>
+            <path d="M123 204c13-27 46-45 74-49l82 116 37 96-111 21z" fill="url(#cuff)" stroke="#131427" stroke-width="3"/>
+            <path d="M126 207c17-23 42-41 71-50l15 22c-32 9-54 26-71 51z" fill="#5a537f" stroke="#27243f" stroke-width="2"/>
+            <path d="M149 220c20-20 40-31 63-38m-42 75 62-37m-36 87 69-36" fill="none" stroke="#8a77a1" stroke-width="2" opacity=".25"/>
+            <path d="M-29-20c4-6 10-7 18-3l11 6-8 10-15-8z" fill="#f1b4a1" opacity=".8"/>
+          </g>
+          <g id="trail" fill="none" stroke="var(--glow)" opacity="0">
+            <path d="M-112 30a116 116 0 0 0 116 86" stroke-width="3" stroke-linecap="round"/>
+            <path d="M-99 34a105 105 0 0 0 87 70" stroke-width="1.5" opacity=".5"/>
+          </g>
+          <g id="pen">
+            <path d="M-125 0l16-4v8z" fill="#d7c7db"/>
+            <path d="m-113-4 17-5v18l-17-5z" fill="url(#chrome)"/>
+            <rect x="-99" y="-10" width="58" height="20" rx="5" fill="#2b2548" stroke="#b8a7dc" stroke-width="1.4"/>
+            <path d="M-91-5h39m-39 4h39m-39 4h39" stroke="#8172a9" stroke-width="1.2" opacity=".8"/>
+            <rect x="-47" y="-9" width="153" height="18" rx="6" fill="url(#barrel)" stroke="#3a2b60" stroke-width="1.4"/>
+            <path d="M-42-5h142" stroke="#e8dcff" stroke-opacity=".63" stroke-linecap="round"/>
+            <rect x="92" y="-9" width="9" height="18" rx="2" fill="url(#chrome)"/>
+            <rect x="103" y="-6" width="13" height="12" rx="3" fill="url(#chrome)"/>
+            <path d="M100-7H64q-5 0-5 4h41z" fill="#e0cce9" stroke="#776a9e" stroke-width="1"/>
+          </g>
+          <g id="thumb">
+            <path d="M79 117C57 123 31 113 17 96 5 82 1 61-3 45c-3-11-13-18-19-28-5-9-3-17 4-21 8-5 17-1 25 6l17 17c10 10 16 20 20 33l9 26 26 14" fill="url(#skin)" stroke="#783b52" stroke-width="2" stroke-linecap="round"/>
+            <path d="M-19 1c5-2 13 1 19 7l8 8c-5 5-12 5-18 1-5-4-10-11-9-16z" fill="#f8b99e" stroke="#c68779" stroke-width="1"/>
+            <path d="M14 43c7-3 12-2 18 3m-15 3c6-2 11-1 16 2m16 27c7 11 12 17 20 20" fill="none" stroke="#a25f64" stroke-width="1.7" opacity=".7" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <div class="beat" aria-hidden="true">
+          <svg viewBox="0 0 140 68">
+            <path d="M16 56Q70-33 124 56" pathLength="1" class="track"/>
+            <path d="M16 56Q70-33 124 56" pathLength="1" class="track-fill" id="track-fill"/>
+            <path d="m124 49 7 7-7 7-7-7z" class="target"/>
+            <circle id="beat-dot" cx="16" cy="56" r="4.5"/>
+          </svg>
+        </div>
+        <div id="grade" class="grade" aria-hidden="true"></div>
+        <button type="button" id="tap" class="tap" aria-label="Start spinning" aria-describedby="instructions">
+          <span id="tap-label" class="tap-label"><span class="play-icon">▶</span> <span id="action-label">Tap to start</span></span>
+        </button>
+        <div id="status" class="sr-only" role="status" aria-live="polite"></div>
+        <div id="result" class="result" hidden>
+          <span id="result-tag">THE RUN IS OVER</span>
+          <strong id="result-title">Pen dropped.</strong>
+          <span id="result-detail"></span>
+        </div>
+      </div>
+      <div class="frame-bottom"><span><kbd>SPACE</kbd> or tap the desk</span><span id="accuracy">Catch the diamond</span></div>
+    </section>
+  </main>
+  <footer class="foot"><span>LANG SYSTEMS ARCADE</span><span>ONE-TAP RHYTHM GAME</span></footer>
+</body>
+</html>
