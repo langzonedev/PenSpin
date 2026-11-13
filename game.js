@@ -92,7 +92,32 @@ function note(frequency, start, duration, level, type = 'sine', endFrequency = f
   oscillator.stop(time + duration + .01);
 }
 
+function texture(context, output, layers) {
+  const now = context.currentTime;
+  for (const [delay, duration, frequency, resonance, level] of layers) {
+    const source = context.createBufferSource();
+    const frames = Math.ceil(context.sampleRate * duration);
+    source.buffer = context.createBuffer(1, frames, context.sampleRate);
+    const data = source.buffer.getChannelData(0);
+    for (let i = 0; i < frames; i++) {
+      const attack = Math.min(1, i / (context.sampleRate * .0015));
+      data[i] = (Math.random() * 2 - 1) * attack * (1 - i / frames) ** 2;
+    }
+    const filter = context.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = frequency;
+    filter.Q.value = resonance;
+    const gain = context.createGain();
+    gain.gain.value = level;
+    source.connect(filter).connect(gain).connect(output);
+    source.start(now + delay);
+  }
+}
+
 function playHit(onTime) {
+  if (soundOn && audio?.state === 'running') {
+    texture(audio, audio.destination, [[0, .035, 1750, 1.8, .29]]);
+  }
   note(630, 0, .055, .095, 'triangle', 290);
   if (onTime) {
     const notes = [392, 440, 493.88, 587.33, 659.25, 783.99];
@@ -159,8 +184,10 @@ function drop(now, reason) {
   setState('dropped', 'Try again', 'Try again');
   const count = streak === 1 ? '1 spin' : streak + ' spins';
   showResult(record ? 'NEW PERSONAL BEST' : 'THE RUN IS OVER', 'Pen dropped.', reason + ' · ' + count);
-  note(210, .10, .13, .10, 'triangle', 64);
-  note(325, .21, .063, .05, 'triangle', 110);
+  if (soundOn && audio?.state === 'running') {
+    texture(audio, audio.destination, [[.1, .07, 1150, 1.5, .52],
+      [.2, .05, 1750, 1.2, .28], [.26, .035, 1600, 1.2, .17]]);
+  }
   render(now);
 }
 
